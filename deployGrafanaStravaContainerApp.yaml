@@ -1,0 +1,29 @@
+properties:
+  configuration:
+    activeRevisionsMode: Single
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 3000
+  template:
+    containers:
+      - image: grafana/grafana-oss:latest
+        name: grafana-app
+        securityContext:
+          runAsUser: 0
+        env:
+          - name: GF_DATABASE_URL
+            value: "sqlite3:///var/lib/grafana/grafana.db?cache=private&mode=rwc&_journal_mode=WAL"
+        resources:
+          cpu: 0.5
+          memory: 1.0Gi
+        volumeMounts:
+          - volumeName: local-grafana-volume
+            mountPath: /var/lib/grafana
+    scale:
+      minReplicas: 1
+      maxReplicas: 1
+    volumes:
+      - name: local-grafana-volume
+        storageName: grafana-strava-volume
+        storageType: AzureFile

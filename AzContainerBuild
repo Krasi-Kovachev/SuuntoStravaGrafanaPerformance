@@ -1,0 +1,39 @@
+AZ commands to create the Azure environment
+
+# Login and get the containerapp extension for az
+az login
+az extension add --name containerapp --upgrade
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.OperationalInsights
+
+# Define environmental variables to simply the process
+RESOURCE_GROUP="grafana-activity-app-rg"
+LOCATION="northeurope"
+ENV_NAME="grafana-app-env"
+APP_NAME="grafana-app-dashboard"
+
+# Create the resource group
+az group create --name $RESOURCE_GROUP --location $LOCATION
+
+# Create the container app environment
+az containerapp env create --name $ENV_NAME --resource-group $RESOURCE_GROUP --location $LOCATION
+
+# Create the container app
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $ENV_NAME \
+  --image grafana/grafana:latest \
+  --target-port 3000 \
+  --ingress external \
+  --query properties.configuration.ingress.fqdn \
+  --output tsv
+
+# Test
+Using the output from the create command above, copy / paste the URL into a web browser
+Username: admin
+Password: admin
+
+!IMPORTANT! - if left as this Grafana will work as normal, however due to the lack of instructions to save the data, either in a mount or external DB, everytime the container is restarted or crashes, all changes will be lost. So we must add storage.
+
+View secretsHandling for options
