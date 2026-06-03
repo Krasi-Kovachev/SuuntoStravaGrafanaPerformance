@@ -23,11 +23,7 @@ az containerapp create \
   --name $APP_NAME \
   --resource-group $RESOURCE_GROUP \
   --environment $ENV_NAME \
-  --image grafana/grafana:latest \
-  --target-port 3000 \
-  --ingress external \
-  --query properties.configuration.ingress.fqdn \
-  --output tsv
+  --yaml deployGrafanaStravaContainerApp.yaml
 
 # Test
 Using the output from the create command above, copy / paste the URL into a web browser

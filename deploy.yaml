@@ -1,0 +1,30 @@
+properties:
+  configuration:
+    activeRevisionsMode: Single
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 3000
+  template:
+    containers:
+      - image: grafana/grafana-oss:latest
+        name: grafana-app
+        env:
+          - name: GF_DATABASE_TYPE
+            value: postgres
+          - name: GF_DATABASE_HOST
+            value: "ep-cool-rock-123456.eastus.aws.neon.tech:5432" # Replace with your host & port
+          - name: GF_DATABASE_NAME
+            value: "neondb"                                     # Replace with your DB name
+          - name: GF_DATABASE_USER
+            value: "alex"                                       # Replace with your DB user
+          - name: GF_DATABASE_PASSWORD
+            value: "my-password"                                # Replace with your DB password
+          - name: GF_DATABASE_SSL_MODE
+            value: "require"
+        resources:
+          cpu: 0.5
+          memory: 1.0Gi
+    scale:
+      minReplicas: 0 # Scales down to zero flawlessly now!
+      maxReplicas: 1
