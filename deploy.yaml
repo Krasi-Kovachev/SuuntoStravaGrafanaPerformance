@@ -26,5 +26,5 @@ properties:
           cpu: 0.5
           memory: 1.0Gi
     scale:
-      minReplicas: 0 # Scales down to zero flawlessly now!
+      minReplicas: 0
       maxReplicas: 1
